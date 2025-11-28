@@ -31,7 +31,7 @@ public class Env {
     }
 
     public Value get(Symbol y) {
-        if (y == x) return v;
+        if (x.equals(y)) return v;
         if (E == null) return null;
         return E.get(y);
     }

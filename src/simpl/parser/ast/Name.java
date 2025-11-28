@@ -24,13 +24,23 @@ public class Name extends Expr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        Type t = E.get(x);
+        if (t == null) {
+            throw new TypeError("Variable " + x + " not found."); // temp
+        }
+        return TypeResult.of(t);
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        Value v = s.E.get(x);
+        if (v == null) {
+            throw new RuntimeError("Variable " + x + " not defined.");
+        }
+        if (v instanceof RecValue) {
+            RecValue rv = (RecValue) v;
+            return (new Rec(rv.x, rv.e)).eval(State.of(rv.E, s.M, s.p));
+        }
+        return v;
     }
 }
