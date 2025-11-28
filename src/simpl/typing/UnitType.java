@@ -28,7 +28,7 @@ final class UnitType extends Type {
 
     @Override
     public Type replace(TypeVar a, Type t) {
-        return Type.UNIT;
+        return this;
     }
 
     public String toString() {
