@@ -22,13 +22,19 @@ public class Cons extends BinaryExpr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        TypeResult lRes = l.typecheck(E);
+        TypeResult rRes = r.typecheck(lRes.s.compose(E));
+        
+        Substitution s = rRes.s.compose(lRes.s);
+        s = s.compose(rRes.t.unify(new ListType(lRes.t)));
+        
+        return TypeResult.of(s, s.apply(rRes.t));
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        Value v1 = l.eval(s);
+        Value v2 = r.eval(s);
+        return new ConsValue(v1, v2);
     }
 }
