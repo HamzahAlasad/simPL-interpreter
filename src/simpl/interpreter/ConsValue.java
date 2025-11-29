@@ -10,12 +10,13 @@ public class ConsValue extends Value {
     }
 
     public String toString() {
-        if (v2 instanceof NilValue) {
-            return "list@0";
-        }
-        else {
-            return "list@" + (Integer.parseInt(v2.toString().substring(5)) + 1);
-        }
+        return "list@" + length();
+    }
+
+    private int length() {
+        if (v2 instanceof NilValue) return 1;
+        if (v2 instanceof ConsValue) return 1 + ((ConsValue) v2).length();
+        return 1;
     }
 
     @Override
