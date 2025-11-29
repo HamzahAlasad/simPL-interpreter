@@ -23,13 +23,19 @@ public class Assign extends BinaryExpr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        TypeResult resL = l.typecheck(E);
+        TypeResult resR = r.typecheck(resL.s.compose(E));
+        
+        Substitution s = resL.t.unify(new RefType(resR.t));
+        
+        return TypeResult.of(s.compose(resR.s).compose(resL.s), Type.UNIT);
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        RefValue ptr = (RefValue) l.eval(s);
+        Value val = r.eval(s);
+        s.M.put(ptr.p, val);
+        return Value.UNIT;
     }
 }

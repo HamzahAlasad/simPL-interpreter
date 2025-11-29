@@ -24,13 +24,17 @@ public class Deref extends UnaryExpr {
 
     @Override
     public TypeResult typecheck(TypeEnv E) throws TypeError {
-        // TODO
-        return null;
+        TypeResult res = e.typecheck(E);
+        TypeVar alpha = new TypeVar(true);
+        Substitution s = res.t.unify(new RefType(alpha));
+        return TypeResult.of(s.compose(res.s), s.apply(alpha));
     }
 
     @Override
     public Value eval(State s) throws RuntimeError {
-        // TODO
-        return null;
+        RefValue ptr = (RefValue) e.eval(s);
+        Value v = s.M.get(ptr.p);
+        if (v == null) throw new RuntimeError("Segmentation fault (invalid pointer)");
+        return v;
     }
 }
